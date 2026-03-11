@@ -45,8 +45,11 @@ async function startServer() {
   // Serve uploaded files
   app.use('/uploads', express.static(path.join(__dirname, 'data', 'uploads')));
 
+  // Check if we are in production (Fly.io sets FLY_APP_NAME)
+  const isProd = process.env.NODE_ENV === 'production' || !!process.env.FLY_APP_NAME;
+
   // Vite middleware for development
-  if (process.env.NODE_ENV !== 'production') {
+  if (!isProd) {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',

@@ -51,7 +51,7 @@ export default function ImageUpload({ value, onChange, label, recommendedSize }:
   return (
     <div className="space-y-2">
       {label && <label className="block text-sm font-medium text-zinc-700">{label}</label>}
-      {recommendedSize && <p className="text-xs text-zinc-500 mb-2">Recomendado: {recommendedSize}</p>}
+      {recommendedSize && <p className="text-xs text-zinc-500 mb-2">Recomendado: {recommendedSize} • Máx 10MB</p>}
       
       {value ? (
         <div className="relative rounded-xl overflow-hidden border border-zinc-200 bg-zinc-50 aspect-video flex items-center justify-center group">
@@ -86,7 +86,7 @@ export default function ImageUpload({ value, onChange, label, recommendedSize }:
           <p className="text-sm font-medium text-zinc-700">
             {uploading ? 'Subiendo...' : 'Haz clic para subir imagen'}
           </p>
-          <p className="text-xs text-zinc-500 mt-1">JPG o PNG (16:9)</p>
+          <p className="text-xs text-zinc-500 mt-1">JPG o PNG (16:9) • Máx 10MB</p>
         </div>
       )}
       

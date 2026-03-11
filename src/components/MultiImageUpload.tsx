@@ -79,7 +79,7 @@ export default function MultiImageUpload({ images, onChange, maxImages = 10 }: M
           {images.length} / {maxImages} imágenes cargadas
         </span>
       </div>
-      <p className="text-xs text-zinc-500 mb-4">Se mostrará una imagen aleatoria de este pool cuando un usuario termine el quiz. Recomendado: 1920x1080 (16:9).</p>
+      <p className="text-xs text-zinc-500 mb-4">Se mostrará una imagen aleatoria de este pool cuando un usuario termine el quiz. Recomendado: 1920x1080 (16:9) • Máx 10MB por imagen.</p>
 
       {images.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-4">
@@ -123,7 +123,7 @@ export default function MultiImageUpload({ images, onChange, maxImages = 10 }: M
             <>
               <Upload className="w-6 h-6 text-zinc-400 mb-2" />
               <p className="text-sm font-medium text-zinc-700">Subir imágenes</p>
-              <p className="text-xs text-zinc-500 mt-1">Puedes seleccionar varias a la vez (JPG, PNG)</p>
+              <p className="text-xs text-zinc-500 mt-1">Puedes seleccionar varias a la vez (JPG, PNG) • Máx 10MB c/u</p>
             </>
           )}
         </div>

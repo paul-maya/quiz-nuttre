@@ -110,7 +110,7 @@ export default function QuizEditor() {
           slug: data.slug,
           number_of_questions: data.number_of_questions,
           ai_prompt: data.ai_prompt,
-          ai_max_words: data.ai_max_words,
+          ai_max_words: data.ai_max_words || 50,
           redirect_potential: data.redirect_potential,
           redirect_not_interested: data.redirect_not_interested,
           result_closing_text: data.result_closing_text || 'Solo algunas personas tienen el perfil adecuado para aprovechar esta oportunidad al máximo. Descubre si tienes lo necesario para dar el siguiente paso.',
@@ -197,33 +197,38 @@ export default function QuizEditor() {
       
       const data = await res.json();
       
-      if (!res.ok) throw new Error(data.error);
+      if (!res.ok) {
+        if (res.status === 401) {
+          throw new Error('Tu sesión ha expirado. Por favor, recarga la página e inicia sesión nuevamente.');
+        }
+        throw new Error(data.error || 'Error desconocido al guardar');
+      }
       
       if (isNew) {
         quizId = data.id;
       }
 
-      // Save Questions
-      await fetch(`/api/quizzes/${quizId}/questions`, {
-        method: 'PUT',
-        headers: { 
-          'Content-Type': 'application/json',
-          ...getAuthHeaders()
-        },
-        body: JSON.stringify({ questions }),
-        credentials: 'include'
-      });
-
-      // Save Results
-      await fetch(`/api/quizzes/${quizId}/results`, {
-        method: 'PUT',
-        headers: { 
-          'Content-Type': 'application/json',
-          ...getAuthHeaders()
-        },
-        body: JSON.stringify({ results }),
-        credentials: 'include'
-      });
+      // Save Questions and Results in parallel
+      await Promise.all([
+        fetch(`/api/quizzes/${quizId}/questions`, {
+          method: 'PUT',
+          headers: { 
+            'Content-Type': 'application/json',
+            ...getAuthHeaders()
+          },
+          body: JSON.stringify({ questions }),
+          credentials: 'include'
+        }),
+        fetch(`/api/quizzes/${quizId}/results`, {
+          method: 'PUT',
+          headers: { 
+            'Content-Type': 'application/json',
+            ...getAuthHeaders()
+          },
+          body: JSON.stringify({ results }),
+          credentials: 'include'
+        })
+      ]);
 
       if (isNew) {
         setIsDirty(false);
@@ -235,7 +240,8 @@ export default function QuizEditor() {
       }
     } catch (error: any) {
       console.error('Save error', error);
-      setValidationError(error.message || 'Error al guardar el quiz. Verifica que el slug sea único.');
+      setValidationError(error.message || 'Error al guardar el quiz. Verifica tu conexión.');
+      alert(`Error: ${error.message || 'No se pudo guardar el quiz'}`);
     } finally {
       setSaving(false);
     }
