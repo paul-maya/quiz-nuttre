@@ -5,11 +5,11 @@ import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
-import db from './server/db.js';
-import authRoutes from './server/routes/auth.js';
-import quizRoutes from './server/routes/quizzes.js';
-import publicRoutes from './server/routes/public.js';
-import uploadRoutes from './server/routes/upload.js';
+import db from './server/db.ts';
+import authRoutes from './server/routes/auth.ts';
+import quizRoutes from './server/routes/quizzes.ts';
+import publicRoutes from './server/routes/public.ts';
+import uploadRoutes from './server/routes/upload.ts';
 
 dotenv.config();
 
@@ -18,7 +18,8 @@ const __dirname = path.dirname(__filename);
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT) || 3000;
+  const HOST = "0.0.0.0";
 
   app.set('trust proxy', true);
   app.use(express.json());
@@ -58,8 +59,8 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+  app.listen(PORT, HOST, () => {
+    console.log(`Server running on http://${HOST}:${PORT}`);
   });
 }
 
