@@ -17,10 +17,13 @@ router.get('/quiz/:slug', (req, res) => {
     const questionsStmt = db.prepare('SELECT id, question_text, positive_text, negative_text, order_number FROM questions WHERE quiz_id = ? ORDER BY order_number ASC');
     const questions = questionsStmt.all(quiz.id);
 
+    const resultImagesStmt = db.prepare('SELECT id, image_url, order_index FROM result_images WHERE quiz_id = ? ORDER BY order_index ASC');
+    const result_images = resultImagesStmt.all(quiz.id);
+
     // Don't send AI prompt or results mapping to public client
     const { ai_prompt, redirect_potential, redirect_not_interested, ...publicQuiz } = quiz;
 
-    res.json({ ...publicQuiz, questions });
+    res.json({ ...publicQuiz, questions, result_images });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch quiz' });
   }

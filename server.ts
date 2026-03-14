@@ -43,7 +43,7 @@ async function startServer() {
   app.use('/api/upload', uploadRoutes);
 
   // Serve uploaded files
-  app.use('/uploads', express.static(path.join(__dirname, 'data', 'uploads')));
+  app.use('/uploads', express.static('/data/uploads'));
 
   // Check if we are in production (Fly.io sets FLY_APP_NAME)
   const isProd = process.env.NODE_ENV === 'production' || !!process.env.FLY_APP_NAME;
